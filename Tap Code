@@ -4,9 +4,10 @@
 
 using namespace std;
 
+//Enkodimi
 string encodeTapCode(const string& message) {
-   
-    map<char, string> tapCodeMap{
+    
+    map<char, string> tapCodeMap {
         {'A', "11"}, {'B', "12"}, {'C', "13"}, {'D', "14"}, {'E', "15"},
         {'F', "21"}, {'G', "22"}, {'H', "23"}, {'I', "24"}, {'J', "25"},
         {'K', "31"}, {'L', "32"}, {'M', "33"}, {'N', "34"}, {'O', "35"},
@@ -16,15 +17,46 @@ string encodeTapCode(const string& message) {
     };
 
     string encodedMessage = "";
-
+    
     for (char c : message) {
-     
+        // Përsëriteni karakteret në shenjat e tapit dhe shtojini një hapësirë mes tyre
         if (tapCodeMap.find(toupper(c)) != tapCodeMap.end()) {
             encodedMessage += tapCodeMap[toupper(c)] + " ";
         }
     }
-
+    
     return encodedMessage;
+}
+
+//Dekodimi
+string decodeTapCode(const string& encodedMessage) {
+
+    map<string, char> tapCodeReverseMap;
+    for (auto& pair : tapCodeMap) {
+        tapCodeReverseMap[pair.second] = pair.first;
+    }
+
+    string decodedMessage = "";
+    string tapCodeSegment = "";
+    
+    for (char c : encodedMessage) {
+        if (c == ' ') {
+           
+            if (!tapCodeSegment.empty()) {
+                if (tapCodeReverseMap.find(tapCodeSegment) != tapCodeReverseMap.end()) {
+                    decodedMessage += tapCodeReverseMap[tapCodeSegment];
+                }
+                tapCodeSegment = ""; // Rikthehet segmenti i tapit
+            } else {
+                // Nëse gjej hapësirë, shtoni një hapësirë në mes të dekodimit
+                decodedMessage += ' ';
+            }
+        } else {
+            tapCodeSegment += c;
+        }
+    }
+    
+    return decodedMessage;
 }
 
 int main() {
@@ -34,6 +66,9 @@ int main() {
 
     string encodedMessage = encodeTapCode(message);
     cout << "Mesazhi i koduar me Tap Code: " << encodedMessage << endl;
+
+    string decodedMessage = decodeTapCode(encodedMessage);
+    cout << "Mesazhi i dekoduar: " << decodedMessage << endl;
 
     return 0;
 }
