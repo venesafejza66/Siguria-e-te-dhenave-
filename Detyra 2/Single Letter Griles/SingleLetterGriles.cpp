@@ -28,21 +28,34 @@ string encryptText(const string& text, const string& grille) {
     return encryptedText;
 }
 
+string generateRandomGrillePattern() {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> dis(0, 1); // 0 for 'X', 1 for 'O'
+
+    string grillePattern;
+    for (int i = 0; i < 16; ++i) {
+        if (dis(gen) == 0) {
+            grillePattern += 'X';
+        } else {
+            grillePattern += 'O';
+        }
+    }
+    return grillePattern;
+}
+
 int main() {
-    string text, grille;
+    string text;
     cout << "Enter the text to encrypt: ";
     getline(cin, text);
 
-    cout << "Enter the grille pattern (16 characters with 'X' for the holes): ";
-    getline(cin, grille);
+    string grillePattern = generateRandomGrillePattern();
+    cout << "Generated grille pattern: " << grillePattern << endl;
 
     // Check if the grille pattern is valid
-    if (grille.length() != 16) {
-        cout << "Invalid grille pattern. It should have exactly 16 characters." << endl;
-        return 0;
-    }
+   
 
-    string encryptedText = encryptText(text, grille);
+    string encryptedText = encryptText(text, grillePattern);
     cout << "Encrypted text: " << encryptedText << endl;
 
     return 0;
