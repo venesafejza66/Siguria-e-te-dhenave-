@@ -52,9 +52,6 @@ int main() {
     string grillePattern = generateRandomGrillePattern();
     cout << "Generated grille pattern: " << grillePattern << endl;
 
-    // Check if the grille pattern is valid
-   
-
     string encryptedText = encryptText(text, grillePattern);
     cout << "Encrypted text: " << encryptedText << endl;
 
